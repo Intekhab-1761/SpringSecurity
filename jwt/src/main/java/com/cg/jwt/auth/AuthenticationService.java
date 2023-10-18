@@ -2,6 +2,7 @@ package com.cg.jwt.auth;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,14 +41,20 @@ public class AuthenticationService {
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) {
 		log.info("AuthenticationService: authenticate: Start");
-		authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(
-						request.getEmail(),
-						request.getPassword()
-						)
-					);
+//		authenticationManager
+//				.authenticate(new UsernamePasswordAuthenticationToken(
+//						request.getEmail(),
+//						request.getPassword()
+//						)
+//					);
+		if(request.getEmail()== null) {
+			throw new UsernameNotFoundException("Enter username and password!!");
+		}
 		log.info("AuthenticationService: authenticate: fetching user by email");
-		var user = repository.findByEmail(request.getEmail()).orElseThrow();
+		var user = repository.findByEmail(request.getEmail());
+		if(user == null) {
+			throw new UsernameNotFoundException("Invalid username or password!!");
+		}
 		log.info("AuthenticationService: authenticate: generatingToken");
 		var jwtToken = jwtService.generateToken(user);
 		log.info("AuthenticationService: authenticate: End");

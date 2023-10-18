@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1//auth/demo-controller")
+@RequestMapping("/api/v1/auth/demo-controller")
 @RequiredArgsConstructor
 public class DemoController {
 
 	@GetMapping
 	public ResponseEntity<String> sayHello(){
-		return ResponseEntity.ok("Hello from secured endpoint");
+		return ResponseEntity.ok("Hello from secured endpoint.");
 	}
 }
